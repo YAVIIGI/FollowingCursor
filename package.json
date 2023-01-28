@@ -1,0 +1,8 @@
+{
+    "name": "jp.ya7gi.followingcursor",
+    "author": "YA7GI",
+    "version": "1.0.0",
+    "displayName": "FollowingCursor",
+    "description": "The cursor following selected UI.",
+    "unity": "2021.3"
+}
