@@ -14,7 +14,19 @@ namespace YA7GI
         [SerializeField]
         Vector2 pivot = new Vector2(0.5f, 0.5f);
 
+        [SerializeField]
+        float showSpeed = 0.5f;
+
+        [SerializeField]
+        float moveSpeedRate = 0.1f;
+
         RectTransform pointerRt;
+
+        float startTime = 0.0f;
+
+        bool isNotShown = false;
+
+        GameObject currentTarget = null;
 
         // Start is called before the first frame update
         void Start()
@@ -27,8 +39,8 @@ namespace YA7GI
         // Update is called once per frame
         void Update()
         {
+            var preIsNotShown = isNotShown;
             var eventSystem = EventSystem.current;
-            bool isNotShown = false;
             if (eventSystem)
             {
                 if (eventSystem.currentSelectedGameObject)
@@ -43,8 +55,9 @@ namespace YA7GI
                     }
                     else
                     {
-                        pointerRt.position = Vector3.Lerp(pointerRt.position, pos, 0.05f);
+                        pointerRt.position = Vector3.Lerp(pointerRt.position, pos, moveSpeedRate);
                     }
+                    isNotShown = false;
                 }
                 else
                 {
@@ -56,15 +69,22 @@ namespace YA7GI
                 isNotShown = true;
             }
 
+            // Debug.Log("fixedTime:" + Time.fixedTime);
+
+            if(preIsNotShown != isNotShown)
+            {
+                startTime = Time.fixedTime;
+            }
+
             if (isNotShown)
             {
-                this.GetComponent<CanvasGroup>().alpha -= 0.01f;
+                this.GetComponent<CanvasGroup>().alpha = 1.0f - ((Time.fixedTime - startTime)) * showSpeed;
                 if (this.GetComponent<CanvasGroup>().alpha < 0)
                     this.GetComponent<CanvasGroup>().alpha = 0;
             }
             else
             {
-                this.GetComponent<CanvasGroup>().alpha += 0.01f;
+                this.GetComponent<CanvasGroup>().alpha = (Time.fixedTime - startTime) * showSpeed;
                 if (this.GetComponent<CanvasGroup>().alpha > 1)
                     this.GetComponent<CanvasGroup>().alpha = 1;
             }
