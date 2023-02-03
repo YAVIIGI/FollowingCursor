@@ -34,6 +34,12 @@ namespace YA7GI
             pointerRt = Instantiate(refPointerRt.gameObject).GetComponent<RectTransform>();
             pointerRt.transform.SetParent(this.transform);
             pointerRt.anchoredPosition = Vector2.zero;
+
+            var eventSystem = EventSystem.current;
+            if(!eventSystem.currentSelectedGameObject)
+            {
+                this.GetComponent<CanvasGroup>().alpha = 0.0f;
+            }
         }
 
         // Update is called once per frame
@@ -69,8 +75,6 @@ namespace YA7GI
                 isNotShown = true;
             }
 
-            // Debug.Log("fixedTime:" + Time.fixedTime);
-
             if(preIsNotShown != isNotShown)
             {
                 startTime = Time.fixedTime;
@@ -78,9 +82,7 @@ namespace YA7GI
 
             if (isNotShown)
             {
-                this.GetComponent<CanvasGroup>().alpha = 1.0f - ((Time.fixedTime - startTime)) * showSpeed;
-                if (this.GetComponent<CanvasGroup>().alpha < 0)
-                    this.GetComponent<CanvasGroup>().alpha = 0;
+                this.GetComponent<CanvasGroup>().alpha = 0.0f;
             }
             else
             {
